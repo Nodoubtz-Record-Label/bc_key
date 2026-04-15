@@ -1,0 +1,26 @@
+name: C Build CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libdb-dev libssl-dev
+
+    - name: Compile bc_key
+      run: gcc -g bc_key.c -ldb -lcrypto -o bc_key
+
+    - name: Verify binary exists
+      run: test -f bc_key
